@@ -19,64 +19,59 @@ const Header: React.FC<HeaderProps> = ({ isSessionActive, onToggleSession, subje
   }, []);
 
   return (
-    <header className="glass sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-amber-500/10">
-      <div className="flex items-center gap-4">
+    <header className="glass sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b-4 border-cyan-400">
+      <div className="flex items-center gap-6">
         <div className="flex flex-col">
-          <h1 className="text-xl font-bold tracking-wider text-amber-100 flex items-center gap-2">
-             <span className="text-amber-500 font-serif">CHRONOS</span>
-             <span className="text-xs text-slate-400 font-normal hidden sm:inline">數位觀課儀表板</span>
+          <h1 className="text-3xl font-black italic tracking-tighter text-cyan-400 neon-text font-orbitron">
+             CHRONOS
           </h1>
-          <p className="text-amber-500/60 text-[10px] tracking-[0.2em] font-light">ELEVATED OBSERVATION SYSTEM</p>
+          <p className="text-cyan-400 text-[10px] font-bold tracking-[0.3em] uppercase">DIGITAL OBSERVATION v2.0</p>
         </div>
         
-        <div className="ml-4 h-10 w-[1px] bg-slate-800" />
+        <div className="hidden lg:block h-12 w-1 bg-cyan-400 transform skew-x-12" />
         
-        <select 
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          disabled={isSessionActive}
-          className="bg-slate-900/50 border border-amber-500/30 rounded-lg px-3 py-1.5 text-sm outline-none focus:border-amber-500 transition-all text-amber-200"
-        >
-          {['國文', '英文', '數學', '自然', '社會', '體育', '藝術', '數位應用'].map(s => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
+        <div className="relative">
+          <select 
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            disabled={isSessionActive}
+            className="bg-black border-2 border-cyan-400 rounded-none px-6 py-2 text-sm font-bold outline-none focus:bg-cyan-900/20 transition-all text-cyan-400 uppercase tracking-widest"
+          >
+            {['國文', '英文', '數學', '自然', '社會', '體育', '藝術', '數位應用'].map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <div className="hidden sm:flex flex-col items-end">
-          <span className="text-2xl font-mono text-amber-400 tabular-nums">{time}</span>
-          <span className="text-[10px] text-slate-500 uppercase">System Synchronized</span>
+      <div className="flex items-center gap-8">
+        <div className="hidden md:flex flex-col items-end">
+          <span className="text-3xl font-black text-cyan-400 tabular-nums font-orbitron neon-text">{time}</span>
+          <span className="text-[10px] text-cyan-600 font-black uppercase tracking-widest">Live Sync</span>
         </div>
 
         <button 
           onClick={onToggleSession}
-          className="relative group transition-transform active:scale-95"
+          className="relative group active:scale-90 transition-transform"
         >
           {isSessionActive ? (
-            <div className="flex items-center gap-3 bg-red-950/40 border border-red-500/50 px-4 py-2 rounded-full text-red-400 hover:bg-red-900/40 transition-colors">
-               <svg width="24" height="24" viewBox="0 0 24 24" className="filter drop-shadow-sm">
-                  <defs>
-                    <linearGradient id="stopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 1 }} />
-                      <stop offset="100%" style={{ stopColor: '#7f1d1d', stopOpacity: 1 }} />
-                    </linearGradient>
-                  </defs>
-                  <rect x="5" y="5" width="14" height="14" rx="2" fill="url(#stopGrad)" />
+            <div className="flex items-center gap-4 bg-black border-4 border-red-500 px-8 py-3 rounded-none text-red-500 hover:bg-red-500 hover:text-black transition-all font-black uppercase tracking-tighter shadow-[5px_5px_0px_#7f1d1d]">
+               <svg width="24" height="24" viewBox="0 0 24 24" className="fill-current">
+                  <rect x="4" y="4" width="16" height="16" />
                </svg>
-               <span className="font-bold tracking-widest text-sm">STOP</span>
+               <span className="text-xl">Stop Observation</span>
             </div>
           ) : (
-            <div className="flex items-center gap-3 bg-amber-950/40 border border-amber-500/50 px-4 py-2 rounded-full text-amber-500 hover:bg-amber-900/40 transition-colors">
+            <div className="flex items-center gap-4 bg-black border-4 border-cyan-400 px-8 py-3 rounded-none text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all font-black uppercase tracking-tighter shadow-[5px_5px_0px_#0066ff]">
                <div className="relative w-6 h-6 flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" className="absolute animate-rotate-slow">
-                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" className="absolute animate-rotate-slow stroke-current fill-none">
+                    <circle cx="12" cy="12" r="10" strokeWidth="2" strokeDasharray="4 2" />
                   </svg>
-                  <svg width="12" height="12" viewBox="0 0 24 24" className="ml-0.5">
-                    <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" className="fill-current">
+                    <path d="M5 3L21 12L5 21V3Z" />
                   </svg>
                </div>
-               <span className="font-bold tracking-widest text-sm">START</span>
+               <span className="text-xl">Start Mission</span>
             </div>
           )}
         </button>

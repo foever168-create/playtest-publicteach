@@ -18,6 +18,8 @@ const INITIAL_STATE: ObservationState = {
     '小組討論': 0,
     '實作/演算': 0,
     '數位運用': 0,
+    '教師回饋': 0,
+    '教師巡視': 0,
   },
   actionCounts: {
     '正向鼓勵': 0,
@@ -38,7 +40,6 @@ const App: React.FC = () => {
   
   const timerRef = useRef<number | null>(null);
 
-  // Engagement reminder logic (5 minutes)
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
@@ -51,7 +52,6 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, [state.isSessionActive, state.lastInteractionTime]);
 
-  // Mode accumulation timer
   useEffect(() => {
     if (state.isSessionActive && state.currentMode) {
       timerRef.current = window.setInterval(() => {
@@ -165,7 +165,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-black text-cyan-400 overflow-hidden">
       <Header 
         isSessionActive={state.isSessionActive}
         onToggleSession={toggleSession}
@@ -173,15 +173,15 @@ const App: React.FC = () => {
         setSubject={setSubject}
       />
 
-      <main className="flex-1 flex flex-col md:flex-row p-4 gap-4 overflow-hidden">
+      <main className="flex-1 flex flex-col md:flex-row p-4 gap-6 overflow-hidden">
         {/* Left: Teaching Modes */}
-        <section className="flex-1 space-y-4">
-          <h2 className="text-amber-500 font-bold flex items-center gap-2">
-            <div className="w-1 h-4 bg-amber-500 rounded-full" />
-            教學模式 (States)
+        <section className="flex-1 space-y-6">
+          <h2 className="text-cyan-400 font-black text-2xl uppercase tracking-tighter flex items-center gap-3 neon-text">
+            <div className="w-8 h-8 bg-cyan-400 rounded-sm transform rotate-45" />
+            教學模式 STATES
           </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {(['講述教學', '小組討論', '實作/演算', '數位運用'] as TeachingMode[]).map(mode => (
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            {(['講述教學', '小組討論', '實作/演算', '數位運用', '教師回饋', '教師巡視'] as TeachingMode[]).map(mode => (
               <ModeCard 
                 key={mode}
                 mode={mode}
@@ -193,12 +193,12 @@ const App: React.FC = () => {
             ))}
           </div>
           
-          <div className="mt-8">
-             <h2 className="text-amber-500 font-bold flex items-center gap-2 mb-4">
-              <div className="w-1 h-4 bg-amber-500 rounded-full" />
-              教學行為 (Actions)
+          <div className="mt-12">
+             <h2 className="text-cyan-400 font-black text-2xl uppercase tracking-tighter flex items-center gap-3 mb-6 neon-text">
+              <div className="w-8 h-8 border-4 border-cyan-400 rounded-full" />
+              教學行為 ACTIONS
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-4">
               {(['正向鼓勵', '糾正規範', '開放提問', '封閉提問', '巡視走動'] as TeachingAction[]).map(action => (
                 <ActionButton 
                   key={action}
@@ -214,11 +214,12 @@ const App: React.FC = () => {
 
         {/* Right: Log Stream */}
         <section className="flex-1 md:max-w-md h-full flex flex-col space-y-4">
-          <h2 className="text-amber-500 font-bold flex items-center gap-2">
-            <div className="w-1 h-4 bg-amber-500 rounded-full" />
-            即時紀錄流 (Log)
+          <h2 className="text-cyan-400 font-black text-2xl uppercase tracking-tighter flex items-center gap-3 neon-text">
+             <div className="w-8 h-2 bg-cyan-400" />
+             即時紀錄 LOG
           </h2>
-          <div className="flex-1 glass rounded-2xl overflow-hidden">
+          <div className="flex-1 glass rounded-none border-4 border-cyan-400 overflow-hidden relative">
+            <div className="absolute inset-0 halftone-dots pointer-events-none text-cyan-900" />
             <LogStream logs={state.logs} />
           </div>
         </section>

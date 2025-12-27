@@ -21,40 +21,34 @@ const ModeCard: React.FC<ModeCardProps> = ({ mode, isActive, duration, onClick, 
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`relative h-28 rounded-2xl p-4 transition-all overflow-hidden flex flex-col justify-between group
+      className={`relative h-32 border-4 transition-all overflow-hidden flex flex-col justify-between p-4 group
         ${isActive 
-          ? 'bg-amber-500 text-slate-950 scale-[1.02] shadow-[0_0_20px_rgba(245,158,11,0.3)]' 
-          : 'bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-amber-500/50'
+          ? 'bg-cyan-400 text-black border-cyan-400 shadow-[8px_8px_0px_#0066ff]' 
+          : 'bg-black border-cyan-400 text-cyan-400 hover:bg-cyan-900/20 shadow-[4px_4px_0px_#004466]'
         }
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+        ${disabled ? 'opacity-30 cursor-not-allowed border-gray-800' : 'cursor-pointer'}
       `}
     >
-      {/* Decorative Klimt element */}
-      <div className={`absolute top-0 right-0 w-16 h-16 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none translate-x-4 -translate-y-4`}>
-         <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="10 5" />
-         </svg>
-      </div>
+      <div className={`absolute top-0 right-0 w-24 h-24 halftone-dots pointer-events-none 
+        ${isActive ? 'text-cyan-600 opacity-40' : 'text-cyan-900 opacity-20'}
+      `} />
 
-      <span className={`text-sm font-medium tracking-wide ${isActive ? 'text-slate-900' : 'text-slate-200'}`}>
+      <span className={`text-lg font-black tracking-tighter uppercase leading-none z-10`}>
         {mode}
       </span>
 
-      <div className="flex flex-col items-start">
-        <span className={`text-2xl font-mono font-bold tabular-nums ${isActive ? 'text-slate-950' : 'text-amber-500'}`}>
+      <div className="flex flex-col items-start z-10">
+        <span className={`text-3xl font-black font-orbitron tabular-nums leading-none ${isActive ? 'text-black' : 'text-cyan-400'}`}>
           {formatDuration(duration)}
         </span>
-        <span className={`text-[10px] uppercase tracking-tighter ${isActive ? 'text-slate-800' : 'text-slate-600'}`}>
-          Cumulative Time
+        <span className={`text-[10px] font-black uppercase tracking-[0.2em] mt-1 opacity-80`}>
+          Session Time
         </span>
       </div>
 
       {isActive && (
-        <div className="absolute top-3 right-3 flex gap-1">
-          <div className="w-1 h-1 bg-slate-900 rounded-full animate-bounce" />
-          <div className="w-1 h-1 bg-slate-900 rounded-full animate-bounce [animation-delay:0.2s]" />
-          <div className="w-1 h-1 bg-slate-900 rounded-full animate-bounce [animation-delay:0.4s]" />
+        <div className="absolute top-2 right-2 flex gap-1">
+          <div className="w-2 h-2 bg-black rounded-none animate-ping" />
         </div>
       )}
     </button>

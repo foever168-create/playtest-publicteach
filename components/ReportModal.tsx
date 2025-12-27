@@ -12,36 +12,31 @@ interface ReportModalProps {
 const formatDuration = (s: number) => {
   const mins = Math.floor(s / 60);
   const secs = s % 60;
-  return `${mins}分${secs}秒`;
+  return `${mins}M ${secs}S`;
 };
 
 const ReportModal: React.FC<ReportModalProps> = ({ state, subject, onClose, onReset }) => {
   
   const generateFormattedText = () => {
-    let text = `【Chronos 數位觀課報告】\n`;
-    text += `科目：${subject}\n`;
-    text += `觀課時間：${new Date(state.startTime!).toLocaleString()}\n`;
-    text += `結束時間：${new Date(state.endTime!).toLocaleString()}\n`;
-    text += `----------------------------------\n`;
-    text += `[教學模式分佈]\n`;
+    let text = `[ CHRONOS OBSERVATION REPORT ]\n`;
+    text += `SUBJECT: ${subject}\n`;
+    text += `START: ${new Date(state.startTime!).toLocaleString()}\n`;
+    text += `END: ${new Date(state.endTime!).toLocaleString()}\n`;
+    text += `==================================\n`;
+    text += `[ MODES ]\n`;
     (Object.entries(state.modeDurations) as [TeachingMode, number][]).forEach(([mode, dur]) => {
       text += `${mode}: ${formatDuration(dur)}\n`;
     });
-    text += `\n[教學行為統計]\n`;
+    text += `\n[ ACTIONS ]\n`;
     (Object.entries(state.actionCounts) as [TeachingAction, number][]).forEach(([act, count]) => {
-      text += `${act}: ${count} 次\n`;
-    });
-    text += `\n[詳細紀錄流]\n`;
-    state.logs.reverse().forEach(log => {
-      const time = new Date(log.timestamp).toLocaleTimeString();
-      text += `${time} | ${log.name} ${log.value ? `(${log.value})` : ''}\n`;
+      text += `${act}: ${count}\n`;
     });
     return text;
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateFormattedText());
-    alert('已複製到剪貼簿！');
+    alert('DATA COPIED TO CLIPBOARD');
   };
 
   const downloadTxt = () => {
@@ -50,86 +45,75 @@ const ReportModal: React.FC<ReportModalProps> = ({ state, subject, onClose, onRe
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `觀課紀錄_${subject}_${new Date().toISOString().split('T')[0]}.txt`;
+    link.download = `LOG_${subject}_${Date.now()}.txt`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-      <div className="glass w-full max-w-2xl max-h-[90vh] rounded-3xl overflow-hidden flex flex-col border border-amber-500/30 shadow-2xl">
-        <div className="p-6 border-b border-amber-500/10 flex justify-between items-center bg-amber-950/20">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md">
+      <div className="bg-black w-full max-w-2xl max-h-[90vh] rounded-none border-8 border-cyan-400 flex flex-col shadow-[20px_20px_0px_#0066ff]">
+        <div className="p-8 border-b-4 border-cyan-400 flex justify-between items-center bg-cyan-400">
           <div>
-            <h2 className="text-xl font-bold text-amber-500">觀課總結報告</h2>
-            <p className="text-xs text-slate-400">Session ID: {Math.random().toString(36).substr(2, 6).toUpperCase()}</p>
+            <h2 className="text-4xl font-black text-black italic tracking-tighter">MISSION COMPLETE</h2>
+            <p className="text-xs text-black font-bold uppercase tracking-widest">Post-Observation Analytics</p>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <button onClick={onClose} className="p-2 text-black hover:rotate-90 transition-transform">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">總時長</span>
-              <p className="text-2xl font-mono text-amber-400 font-bold">
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 relative">
+          <div className="absolute inset-0 halftone-dots pointer-events-none text-cyan-900/10" />
+          
+          <div className="grid grid-cols-2 gap-6 relative z-10">
+            <div className="bg-black p-6 border-4 border-cyan-400 shadow-[6px_6px_0px_#0066ff]">
+              <span className="text-xs font-black text-cyan-600 uppercase tracking-widest">Total Duration</span>
+              <p className="text-4xl font-black font-orbitron text-cyan-400 mt-2">
                 {formatDuration(Math.floor((state.endTime! - state.startTime!) / 1000))}
               </p>
             </div>
-            <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">觀察科目</span>
-              <p className="text-2xl text-slate-200 font-bold">{subject}</p>
+            <div className="bg-black p-6 border-4 border-cyan-400 shadow-[6px_6px_0px_#0066ff]">
+              <span className="text-xs font-black text-cyan-600 uppercase tracking-widest">Subject</span>
+              <p className="text-4xl font-black text-white mt-2">{subject}</p>
             </div>
           </div>
 
-          <div>
-             <h3 className="text-sm font-bold text-amber-500/80 mb-3 flex items-center gap-2">
-                <div className="w-1 h-3 bg-amber-500 rounded-full" /> 教學模式分析
+          <div className="relative z-10">
+             <h3 className="text-xl font-black text-cyan-400 mb-4 flex items-center gap-3">
+                <div className="w-4 h-4 bg-cyan-400" /> Mode Analytics
              </h3>
-             <div className="space-y-2">
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                {(Object.entries(state.modeDurations) as [TeachingMode, number][]).map(([mode, dur]) => (
-                 <div key={mode} className="flex items-center justify-between text-sm bg-slate-900/40 p-2 rounded-lg">
-                   <span className="text-slate-400">{mode}</span>
-                   <span className="font-mono text-amber-200">{formatDuration(dur)}</span>
-                 </div>
-               ))}
-             </div>
-          </div>
-
-          <div>
-             <h3 className="text-sm font-bold text-amber-500/80 mb-3 flex items-center gap-2">
-                <div className="w-1 h-3 bg-amber-500 rounded-full" /> 行為紀錄摘要
-             </h3>
-             <div className="flex flex-wrap gap-2">
-               {(Object.entries(state.actionCounts) as [TeachingAction, number][]).map(([act, count]) => (
-                 <div key={act} className="px-3 py-1 bg-slate-800 rounded-full text-xs text-slate-300">
-                   {act}: <span className="text-amber-400 font-bold">{count}</span>
+                 <div key={mode} className="flex items-center justify-between p-3 border-2 border-cyan-900 bg-cyan-950/20">
+                   <span className="text-cyan-700 font-bold uppercase text-xs">{mode}</span>
+                   <span className="font-black font-orbitron text-cyan-400">{formatDuration(dur)}</span>
                  </div>
                ))}
              </div>
           </div>
         </div>
 
-        <div className="p-6 bg-slate-900/80 border-t border-amber-500/10 flex gap-3">
+        <div className="p-8 bg-black border-t-4 border-cyan-400 flex flex-wrap gap-4 relative z-10">
           <button 
             onClick={copyToClipboard}
-            className="flex-1 py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold text-sm transition-all border border-slate-700 active:scale-95"
+            className="flex-1 min-w-[150px] py-4 px-6 border-4 border-cyan-400 text-cyan-400 font-black text-lg hover:bg-cyan-400 hover:text-black transition-all shadow-[6px_6px_0px_#0066ff] active:translate-x-1 active:translate-y-1"
           >
-            複製紀錄
+            COPY DATA
           </button>
           <button 
             onClick={downloadTxt}
-            className="flex-1 py-3 px-4 Klimt-gradient bg-amber-500 hover:brightness-110 text-slate-950 rounded-xl font-bold text-sm transition-all active:scale-95 shadow-lg shadow-amber-500/20"
+            className="flex-1 min-w-[150px] py-4 px-6 bg-cyan-400 text-black font-black text-lg hover:bg-white transition-all shadow-[6px_6px_0px_#0066ff] active:translate-x-1 active:translate-y-1"
           >
-            下載 TXT
+            DOWNLOAD LOG
           </button>
           <button 
             onClick={onReset}
-            className="py-3 px-4 bg-red-950/20 border border-red-500/30 text-red-500 rounded-xl font-bold text-sm hover:bg-red-500/10 transition-all active:scale-95"
+            className="w-full py-4 px-6 border-4 border-red-500 text-red-500 font-black text-lg hover:bg-red-500 hover:text-black transition-all shadow-[6px_6px_0px_#7f1d1d] active:translate-x-1 active:translate-y-1"
           >
-            重新開始
+            NEW MISSION
           </button>
         </div>
       </div>

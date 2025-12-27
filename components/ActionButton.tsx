@@ -14,17 +14,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({ action, count, onClick, dis
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-5 py-3 rounded-xl flex items-center gap-3 border transition-all active:scale-95
+      className={`px-6 py-4 border-4 flex items-center gap-4 transition-all active:translate-x-1 active:translate-y-1
         ${disabled 
-          ? 'opacity-40 border-slate-800 bg-slate-900/40' 
-          : 'border-amber-500/20 bg-slate-900/60 hover:border-amber-500/60 hover:bg-slate-800 group'
+          ? 'opacity-20 border-gray-800 bg-transparent' 
+          : 'border-cyan-400 bg-black hover:bg-cyan-400 hover:text-black shadow-[4px_4px_0px_#0066ff] group'
         }
       `}
     >
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold Klimt-gradient bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors`}>
+      <div className={`w-10 h-10 border-2 border-current flex items-center justify-center text-xl font-black font-orbitron`}>
         {count}
       </div>
-      <span className="text-sm text-slate-300 group-hover:text-amber-100 font-medium">{action}</span>
+      <span className="text-lg font-black uppercase tracking-tighter">{action}</span>
     </button>
   );
 };
